@@ -323,3 +323,28 @@ body {
         background-color: $backgroundColor;
     }
 }
+
+/*********************************************
+ * CUSTOM
+ *********************************************/
+.reveal section {
+	img {
+		&.logo {
+			background: none;
+			border: none;
+			box-shadow: none;
+			vertical-align: middle;
+			max-height: 4em;
+
+			&.twitter {
+				height: 2em;
+			}
+			&.monkeypatch {
+				height: 2em;
+			}
+			&.developpez {
+				height: 3em;
+			}
+		}
+	}
+}
