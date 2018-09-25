@@ -293,3 +293,11 @@ body {
     height: 2em; }
   .reveal section img.logo.developpez {
     height: 3em; }
+
+.reveal section img.architecture {
+  background: none;
+  border: none;
+  box-shadow: none;
+  margin: -20px 0;
+  max-height: 750px;
+  padding: 0; }
