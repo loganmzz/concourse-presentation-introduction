@@ -346,5 +346,13 @@ body {
 				height: 3em;
 			}
 		}
+		&.architecture {
+			background: none;
+			border: none;
+			box-shadow: none;
+			margin: -20px 0;
+			max-height:  750px;
+			padding: 0;
+		}
 	}
 }
