@@ -354,5 +354,10 @@ body {
 			max-height:  750px;
 			padding: 0;
 		}
+		&.demo-architecture {
+			background: none;
+			border: none;
+			box-shadow: none;
+		}
 	}
 }
