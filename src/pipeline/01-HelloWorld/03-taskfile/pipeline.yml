@@ -1,0 +1,13 @@
+resources:
+- name: src
+  type: git
+  source:
+    uri: ((git.base-uri))hello.git
+    private_key: ((git.private-key))
+
+jobs:
+- name: Hello
+  plan:
+  - get: src
+  - task: say Hello
+    file: src/ci/tasks/hello.yml

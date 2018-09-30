@@ -1,0 +1,8 @@
+platform: linux
+image_resource:
+    type: docker-image
+    source: { repository: alpine, tag: 3.8 }
+run: { path: src/ci/scripts/hello.sh }
+inputs:
+- name: src
+- name: recipient

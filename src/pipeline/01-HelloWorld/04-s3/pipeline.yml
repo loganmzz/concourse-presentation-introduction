@@ -1,0 +1,24 @@
+resources:
+- name: src
+  type: git
+  source:
+    uri: ((git.base-uri))hello.git
+    private_key: ((git.private-key))
+
+- name: recipient
+  type: s3
+  source:
+    endpoint: ((s3.endpoint))
+    disable_ssl: ((s3.disable_ssl))
+    bucket: ((s3.bucket))
+    access_key_id: ((s3.access_key_id))
+    secret_access_key: ((s3.secret_access_key))
+    regexp: hello/recipient-(.*).txt
+
+jobs:
+- name: Hello
+  plan:
+  - get: src
+  - get: recipient
+  - task: say Hello
+    file: src/ci/tasks/hello.yml
