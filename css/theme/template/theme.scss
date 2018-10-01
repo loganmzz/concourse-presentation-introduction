@@ -327,12 +327,19 @@ body {
 /*********************************************
  * CUSTOM
  *********************************************/
+%no-box {
+	background: none;
+	border: none;
+	box-shadow: none;
+}
+
 .reveal section {
 	img {
+		&.no-box {
+			@extend %no-box;
+		}
 		&.logo {
-			background: none;
-			border: none;
-			box-shadow: none;
+			@extend %no-box;
 			vertical-align: middle;
 			max-height: 4em;
 
@@ -347,17 +354,10 @@ body {
 			}
 		}
 		&.architecture {
-			background: none;
-			border: none;
-			box-shadow: none;
+			@extend %no-box;
 			margin: -20px 0;
 			max-height:  750px;
 			padding: 0;
-		}
-		&.demo-architecture {
-			background: none;
-			border: none;
-			box-shadow: none;
 		}
 	}
 }

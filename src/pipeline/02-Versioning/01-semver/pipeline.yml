@@ -1,0 +1,38 @@
+resources:
+- name: version
+  type: semver
+  source:
+    driver: s3
+    endpoint: ((s3.endpoint))
+    bucket: ((s3.bucket))
+    access_key_id: ((s3.access_key_id))
+    secret_access_key: ((s3.secret_access_key))
+    key: version/version.txt
+
+jobs:
+- name: echo
+  plan:
+  - get: version
+  - task: echo version
+    config:
+      platform: linux
+      image_resource:
+        type: docker-image
+        source:
+          repository: alpine
+          tag: 3.8
+      inputs: [{name: version}]
+      run:
+        path: cat
+        args:
+        - version/version
+
+- name: bump-major
+  plan:
+  - put: version
+    params: { bump: major }
+
+- name: bump-minor
+  plan:
+  - put: version
+    params: { bump: minor }

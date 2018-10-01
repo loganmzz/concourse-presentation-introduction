@@ -1,0 +1,139 @@
+groups:
+- name: release
+  jobs: [prepare-release, generate-release]
+
+- name: version
+  jobs: [bump-major, bump-minor]
+
+resources:
+- name: version
+  type: semver
+  source:
+    driver: s3
+    endpoint: ((s3.endpoint))
+    bucket: ((s3.bucket))
+    access_key_id: ((s3.access_key_id))
+    secret_access_key: ((s3.secret_access_key))
+    key: version/version.txt
+
+- name: source
+  type: s3
+  source:
+    endpoint: ((s3.endpoint))
+    disable_ssl: ((s3.disable_ssl))
+    bucket: ((s3.bucket))
+    access_key_id: ((s3.access_key_id))
+    secret_access_key: ((s3.secret_access_key))
+    regexp: version/sources/demo-(.*)-src.tar.gz
+
+- name: release
+  type: s3
+  source:
+    endpoint: ((s3.endpoint))
+    disable_ssl: ((s3.disable_ssl))
+    bucket: ((s3.bucket))
+    access_key_id: ((s3.access_key_id))
+    secret_access_key: ((s3.secret_access_key))
+    regexp: version/releases/demo-(.*)
+
+
+- name: cargo-bump
+  type: s3
+  source:
+    endpoint: ((s3.endpoint))
+    disable_ssl: ((s3.disable_ssl))
+    bucket: ((s3.bucket))
+    access_key_id: ((s3.access_key_id))
+    secret_access_key: ((s3.secret_access_key))
+    regexp: cargo-bump-(.*)
+
+jobs:
+- name: prepare-release
+  plan:
+  - put: version
+    params: { bump: patch }
+  - get: cargo-bump
+  - task: new
+    config:
+      platform: linux
+      image_resource:
+        type: docker-image
+        source:
+          repository: loganmzz/rust
+          tag: 1.28.0
+      inputs:
+      - name: cargo-bump
+      - name: version
+      outputs:
+      - name: source
+      run:
+        user: root
+        path: bash
+        args:
+        - -c
+        - |
+          set -euo pipefail
+          rootdir=$(pwd)
+          version=$(cat ${rootdir}/version/version)
+          
+          echo "   ---   Install cargo-bump   ---"
+          ln -s ${rootdir}/cargo-bump/cargo-bump-$(cat cargo-bump/version) /home/rust/.cargo/bin/cargo-bump
+          chmod +x /home/rust/.cargo/bin/cargo-bump
+          
+          echo "   ---    Create new project   ---"
+          cargo new demo
+          pushd demo
+            cargo bump ${version}
+          popd
+          
+          echo "   ---   Archive   ---"
+          echo ${version} > demo/version
+          pushd demo
+            tar zcvf ${rootdir}/source/demo-${version}-src.tar.gz *
+          popd
+  - put: source
+    params: { file: source/demo-*-src.tar.gz }
+- name: generate-release
+  plan:
+  - get: source
+    params: {unpack: true}
+    passed: [prepare-release]
+    trigger: true
+  - task: build
+    config:
+      platform: linux
+      image_resource:
+        type: docker-image
+        source:
+          repository: loganmzz/rust
+          tag: 1.28.0
+      inputs:
+      - name: source
+      outputs:
+      - name: release
+      run:
+        user: root
+        path: bash
+        args:
+        - -c
+        - |
+          set -euo pipefail
+          
+          echo "   ---    Build project   ---"
+          pushd source
+            cargo build --release
+          popd
+          cp source/target/release/demo release/demo-$(cat source/version)
+  - put: release
+    params: { file: release/demo-* }
+
+
+- name: bump-major
+  plan:
+  - put: version
+    params: { bump: major }
+
+- name: bump-minor
+  plan:
+  - put: version
+    params: { bump: minor }
