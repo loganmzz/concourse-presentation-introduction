@@ -281,10 +281,12 @@ body {
 /*********************************************
  * CUSTOM
  *********************************************/
-.reveal section img.logo {
+.reveal section img.no-box, .reveal section img.logo, .reveal section img.architecture {
   background: none;
   border: none;
-  box-shadow: none;
+  box-shadow: none; }
+
+.reveal section img.logo {
   vertical-align: middle;
   max-height: 4em; }
   .reveal section img.logo.twitter {
@@ -295,9 +297,6 @@ body {
     height: 3em; }
 
 .reveal section img.architecture {
-  background: none;
-  border: none;
-  box-shadow: none;
   margin: -20px 0;
   max-height: 750px;
   padding: 0; }
