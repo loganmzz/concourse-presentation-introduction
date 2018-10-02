@@ -1,0 +1,59 @@
+groups:
+- name: job-volume
+  jobs: [maven-cache]
+- name: native
+  jobs: [A, B]
+
+resources:
+- name: git
+  type: git
+  source:
+    uri: ((git.base-uri))cache-maven
+    private_key: ((git.private-key))
+
+jobs:
+- name: maven-cache
+  plan:
+  - get: git
+  - task: compile
+    file: git/src/ci/tasks/compile.yml
+    input_mapping:
+      src: git
+    output_mapping:
+      repository.out: maven_repository
+  - task: recompile
+    file: git/src/ci/tasks/compile.yml
+    input_mapping:
+      src: git
+      repository.in: maven_repository
+
+- name: A
+  plan: &cacheplan
+  - task: t01
+    config: &cachetask
+      platform: linux
+      image_resource:
+        type: docker-image
+        source: {repository: alpine, tag: 3.8}
+      caches:
+      - path: cache
+      run:
+        path: ash
+        args:
+        - -c
+        - |
+          echo "============================================================================"
+          echo '   ---   Cache content   ---'
+          ls -lR cache
+          echo
+
+          filename=$(date '-Iseconds' | tr ':+' '--')
+          echo "   ---   Put ${filename}   ---"
+          date > "cache/${filename}"
+          ls -lR cache
+          echo
+  - task: t02
+    config: *cachetask
+
+- name: B
+  plan: *cacheplan
