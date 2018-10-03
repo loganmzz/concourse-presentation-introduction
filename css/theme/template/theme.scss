@@ -334,6 +334,24 @@ body {
 }
 
 .reveal section {
+	table.versus {
+		tr {
+			&> td:nth-child(1) {
+				font-size: 1.5em;
+			}
+			&> td:nth-child(3)::before {
+				content: 'VS';
+			}
+			&.better > td:nth-child(1)::before {
+				color: green;
+				content: '👍';
+			}
+			&.worse > td:nth-child(1)::before {
+				color: red;
+				content: '👎';
+			}
+		}
+	}
 	img {
 		&.no-box {
 			@extend %no-box;
