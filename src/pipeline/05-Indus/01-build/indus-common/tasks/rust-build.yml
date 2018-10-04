@@ -1,0 +1,12 @@
+platform: linux
+image_resource:
+  type: docker-image
+  source:
+    repository: loganmzz/rust
+    tag: 1.28.0
+run:
+  user: root
+  path: ci/scripts/rust-build.sh
+inputs:
+- name: ci
+- name: src

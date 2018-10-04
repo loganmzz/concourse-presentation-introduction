@@ -1,0 +1,71 @@
+groups:
+- name: build
+  jobs: [build]
+- name: pipeline
+  jobs: [pipeline-autoupdate]
+
+resources:
+- name: git-ci
+  type: git
+  source:
+    uri: ((git.base-uri))indus-common
+    private_key: ((git.private-key))
+- name: git-project
+  type: git
+  source:
+    uri: ((git.base-uri))((project-name))
+    private_key: ((git.private-key))
+
+- name: ci-parameters
+  type: s3
+  source:
+    endpoint: ((s3.endpoint))
+    disable_ssl: ((s3.disable_ssl))
+    bucket: ((s3.bucket))
+    access_key_id: ((s3.access_key_id))
+    secret_access_key: ((s3.secret_access_key))
+    regexp: indus/parameters/((project-name))-(.*).yml
+- name: concourse
+  type: concourse-pipeline
+  source:
+    target: http://web.concourse.local
+    insecure: "true"
+    teams:
+    - name: main
+      username: ((ci.username))
+      password: ((ci.password))
+
+jobs:
+- name: build
+  plan:
+  - get: git-project
+    trigger: true
+  - get: git-ci
+  - task: build
+    file: git-ci/tasks/rust-build.yml
+    input_mapping:
+      ci: git-ci
+      src: git-project
+
+- name: pipeline-autoupdate
+  serial: true
+  plan:
+  - aggregate:
+    - get: git-ci
+      trigger: true
+    - get: ci-parameters
+      trigger: true
+  - put: concourse
+    params:
+      pipelines:
+      - name: ((project-name))
+        team: main
+        config_file: git-ci/pipelines/rust.yml
+        var_files:
+        - ci-parameters/((project-name))-*.yml
+
+resource_types:
+- name: concourse-pipeline
+  type: docker-image
+  source:
+    repository: concourse/concourse-pipeline-resource

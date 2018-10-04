@@ -1,0 +1,23 @@
+resources:
+- name: git-ci
+  type: git
+  source:
+    uri: ((git.base-uri))indus-common
+    private_key: ((git.private-key))
+- name: git-project
+  type: git
+  source:
+    uri: ((git.base-uri))((project-name))
+    private_key: ((git.private-key))
+
+jobs:
+- name: build
+  plan:
+  - get: git-project
+    trigger: true
+  - get: git-ci
+  - task: build
+    file: git-ci/tasks/rust-build.yml
+    input_mapping:
+      ci: git-ci
+      src: git-project

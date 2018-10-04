@@ -2,7 +2,7 @@
 
 * [`pool`](https://github.com/concourse/pool-resource) : gestion de ressources
 
-* [`concourse-pipeline`](https://github.com/concourse/concourse-pipeline-resource) : auto-reconfiguration
+* [`try`](https://concourse-ci.org/try-step.html), [`ensure`](https://concourse-ci.org/ensure-step-hook.html), [`timeout`](https://concourse-ci.org/timeout-step-modifier.html), [`attempts`](https://concourse-ci.org/attempts-step-modifier.html)
 
 * [tutoriel Stark&Wayne](https://concoursetutorial.com/)
 
