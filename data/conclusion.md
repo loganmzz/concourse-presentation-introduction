@@ -35,6 +35,16 @@
 
 ---
 
+## A retenir
+
+* distribué, conteneurisé
+
+* code-centric, pipeline
+
+* _burnable: no source of truth, no assumption_
+
+---
+
 ## Questions ?
 
 ![Questions ?](assets/img/question.gif)
