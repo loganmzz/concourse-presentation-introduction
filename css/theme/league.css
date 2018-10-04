@@ -1,3 +1,4 @@
+@charset "UTF-8";
 /**
  * League theme for reveal.js.
  *
@@ -285,6 +286,20 @@ body {
   background: none;
   border: none;
   box-shadow: none; }
+
+.reveal section table.versus tr > td:nth-child(1) {
+  font-size: 1.5em; }
+
+.reveal section table.versus tr > td:nth-child(3)::before {
+  content: 'VS'; }
+
+.reveal section table.versus tr.better > td:nth-child(1)::before {
+  color: green;
+  content: '👍'; }
+
+.reveal section table.versus tr.worse > td:nth-child(1)::before {
+  color: red;
+  content: '👎'; }
 
 .reveal section img.logo {
   vertical-align: middle;
