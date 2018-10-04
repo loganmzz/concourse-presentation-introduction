@@ -12,3 +12,4 @@ node_modules/
 css/reveal.min.css
 /css/theme/*.css
 js/reveal.min.js
+/workdir
