@@ -1,0 +1,13 @@
+platform: linux
+image_resource:
+  type: docker-image
+  source:
+    repository: loganmzz/rust
+    tag: 1.28.0
+inputs:
+- name: source
+outputs:
+- name: release
+run:
+  user: root
+  path: source/ci/scripts/generate-release.sh

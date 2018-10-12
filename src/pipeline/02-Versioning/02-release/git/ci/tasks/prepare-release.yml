@@ -1,0 +1,15 @@
+platform: linux
+image_resource:
+    type: docker-image
+    source:
+        repository: loganmzz/rust
+        tag: 1.28.0
+inputs:
+- name: cargo-bump
+- name: version
+- name: git
+outputs:
+- name: source
+run:
+    user: root
+    path: git/ci/scripts/prepare-release.sh
