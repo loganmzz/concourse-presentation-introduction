@@ -10,9 +10,4 @@ jobs:
           insecure_registries: ((docker.insecure_registries))
           repository: ((docker.registry))alpine
           tag: 3.8
-      run:
-        path: ash
-        args:
-        - c
-        - |
-          sleep 300
+      run: { path: sleep, args: [300] }
