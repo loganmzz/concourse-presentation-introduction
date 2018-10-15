@@ -1,7 +1,10 @@
 platform: linux
 image_resource:
   type: docker-image
-  source: {repository: maven, tag: 3.5.4}
+  source:
+    insecure_registries: ((docker.insecure_registries))
+    repository: ((docker.registry))maven
+    tag: 3.5.4
 inputs:
 - name: src
 - name: repository.in

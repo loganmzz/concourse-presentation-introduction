@@ -4,6 +4,7 @@ resources:
   source:
     uri: ((git.base-uri))hello.git
     private_key: ((git.private-key))
+    branch: 04-s3
 
 - name: recipient
   type: s3

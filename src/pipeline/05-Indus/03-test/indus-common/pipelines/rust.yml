@@ -1,12 +1,7 @@
-groups:
-- name: build
-  jobs: [test, build]
-- name: pipeline
-  jobs: [pipeline-autoupdate]
-
 resources:
 - name: git-ci
   type: git
+  check_every: 10s
   source:
     uri: ((git.base-uri))indus-common
     private_key: ((git.private-key))
@@ -49,10 +44,12 @@ jobs:
 
 - name: build
   plan:
-  - get: git-project
-    passed: [test]
-    trigger: true
-  - get: git-ci
+  - aggregate:
+    - get: git-project
+      passed: [test]
+      trigger: true
+    - get: git-ci
+      passed: [test]
   - task: build
     file: git-ci/tasks/rust-build.yml
     input_mapping:
@@ -73,11 +70,12 @@ jobs:
       - name: ((project-name))
         team: main
         config_file: git-ci/pipelines/rust.yml
-        var_files:
+        vars_files:
         - ci-parameters/((project-name))-*.yml
 
 resource_types:
 - name: concourse-pipeline
   type: docker-image
   source:
-    repository: concourse/concourse-pipeline-resource
+    insecure_registries: ((docker.insecure_registries))
+    repository: ((docker.registry))concourse/concourse-pipeline-resource

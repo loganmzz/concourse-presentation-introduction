@@ -4,6 +4,7 @@ resources:
   source:
     uri: ((git.base-uri))hello.git
     private_key: ((git.private-key))
+    branch: 03-taskfile
 
 jobs:
 - name: Hello

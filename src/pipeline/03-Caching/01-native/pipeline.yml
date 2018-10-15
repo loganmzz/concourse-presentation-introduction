@@ -10,7 +10,10 @@ jobs:
       platform: linux
       image_resource:
         type: docker-image
-        source: {repository: alpine, tag: 3.8}
+        source:
+          insecure_registries: ((docker.insecure_registries))
+          repository: ((docker.registry))alpine
+          tag: 3.8
       caches:
       - path: cache
       run:

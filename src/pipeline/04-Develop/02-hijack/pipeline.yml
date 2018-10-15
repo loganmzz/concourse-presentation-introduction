@@ -7,7 +7,8 @@ jobs:
       image_resource:
         type: docker-image
         source:
-          repository: alpine
+          insecure_registries: ((docker.insecure_registries))
+          repository: ((docker.registry))alpine
           tag: 3.8
       run:
         path: ash

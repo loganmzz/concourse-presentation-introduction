@@ -1,6 +1,7 @@
 resources:
 - name: git-ci
   type: git
+  check_every: 10s
   source:
     uri: ((git.base-uri))indus-common
     private_key: ((git.private-key))
