@@ -1,0 +1,21 @@
+$theme-main-color: Marron;
+
+@import "./league.scss";
+
+.reveal {
+
+    &> .backgrounds .slide-background {
+        & > .slide-background-content {
+            background-image: url(../../assets/img/theme/2018-DevFestNantes/#{$theme-main-color}-01-bg-standard.png);
+        }
+
+        &.slide-title .slide-background-content {
+            background-image: url(../../assets/img/theme/2018-DevFestNantes/#{$theme-main-color}-00-bg-title.png);
+        }
+    }
+
+    &.overview {
+        background-image: url(../../assets/img/theme/2018-DevFestNantes/#{$theme-main-color}-00-bg-title.png);
+    }
+
+}
