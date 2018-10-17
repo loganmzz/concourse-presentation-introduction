@@ -1,3 +1,4 @@
+<!-- .slide: class="slide-title" -->
 ## Concourse : CI/CD version 2020 !
 
 https://github.com/loganmzz/concourse-presentation-introduction
