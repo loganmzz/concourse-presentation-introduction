@@ -1,5 +1,5 @@
 jobs:
-- name: long-job
+- name: long
   plan:
   - task: long-task
     config:
