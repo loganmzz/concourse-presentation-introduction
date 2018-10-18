@@ -31,7 +31,7 @@ __init_pipelines() {
 __init_s3() {
     echo '   ===   INIT S3   ==='
     echo '   ---   Init hello/recipient   ---'
-    "${concourse_manager}" s3 pipe 'hello/recipient-1.0.0.txt' <<<'World'
+    "${concourse_manager}" s3 pipe 'hello/recipient-1.0.0.txt' <<<'DevFest Nantes 2018'
 
     echo '   ---   Removes version/**   ---'
     "${concourse_manager}" s3 rm --recursive --force 'version/'
