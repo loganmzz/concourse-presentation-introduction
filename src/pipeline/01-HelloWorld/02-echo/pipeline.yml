@@ -1,5 +1,5 @@
 jobs:
-- name: Hello
+- name: hello
   plan:
   - task: say Hello
     config:

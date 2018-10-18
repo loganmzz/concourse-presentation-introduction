@@ -7,7 +7,7 @@ resources:
     branch: 03-taskfile
 
 jobs:
-- name: Hello
+- name: hello
   plan:
   - get: src
   - task: say Hello
