@@ -1,0 +1,55 @@
+resources:
+- name: concourse
+  type: concourse-pipeline
+  source:
+    target: http://web.concourse.local
+    insecure: "true"
+    teams:
+    - name: main
+      username: ((ci.username))
+      password: ((ci.password))
+
+jobs:
+- name: init
+  plan:
+  - aggregate:
+    - task: get alpine:3.8
+      config:
+        platform: linux
+        image_resource:
+            type: docker-image
+            source:
+                insecure_registries: ((docker.insecure_registries))
+                repository: ((docker.registry))alpine
+                tag: 3.8
+        run: {path: echo, args: ['alpine:3.8 ready']}
+    - task: get loganmzz/rust:1.28.0
+      config:
+        platform: linux
+        image_resource:
+            type: docker-image
+            source:
+                insecure_registries: ((docker.insecure_registries))
+                repository: ((docker.registry))loganmzz/rust
+                tag: 1.28.0
+        run: {path: echo, args: ['loganmzz/rust:1.28.0 ready']}
+    - task: get maven:3.5.4
+      config:
+        platform: linux
+        image_resource:
+            type: docker-image
+            source:
+                insecure_registries: ((docker.insecure_registries))
+                repository: ((docker.registry))maven
+                tag: 3.5.4
+        run: {path: echo, args: ['maven:3.5.4 ready']}
+    - get: concourse
+
+
+
+resource_types:
+- name: concourse-pipeline
+  type: docker-image
+  source:
+    insecure_registries: ((docker.insecure_registries))
+    repository: ((docker.registry))concourse/concourse-pipeline-resource
