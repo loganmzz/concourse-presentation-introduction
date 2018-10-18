@@ -17,7 +17,7 @@ resources:
     regexp: hello/recipient-(.*).txt
 
 jobs:
-- name: Hello
+- name: hello
   plan:
   - get: src
   - get: recipient
